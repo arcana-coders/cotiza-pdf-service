@@ -67,7 +67,7 @@ export async function generateHTML(input: CotizacionInput): Promise<string> {
 
     const template = handlebars.compile(templateHtml);
 
-    handlebars.registerHelper('json', function (context) {
+    handlebars.registerHelper('json', function (context: unknown) {
         return JSON.stringify(context);
     });
 

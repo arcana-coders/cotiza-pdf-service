@@ -49,7 +49,7 @@ app.post('/generate-pdf', authMiddleware, async (req: Request, res: Response): P
         // Validate input
         const parseResult = CotizacionSchema.safeParse(quotationData);
         if (!parseResult.success) {
-            res.status(400).json({ error: 'Invalid data', details: parseResult.error.errors });
+            res.status(400).json({ error: 'Invalid data', details: parseResult.error.issues });
             return;
         }
 

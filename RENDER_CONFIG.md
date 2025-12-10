@@ -29,26 +29,72 @@ Agrega estas variables en Render Dashboard → Environment:
 
 Esto permite a Render verificar que el servicio está funcionando correctamente.
 
+## Keep-Alive Configuration
+
+El plan Free de Render hiberna servicios después de 15 minutos de inactividad. Para mantenerlo activo:
+
+### Configurar Cron Job (Gratis)
+
+**Opción 1: cron-job.org (Sin registro)**
+
+1. Ve a https://cron-job.org
+2. Click en "Create cronjob"
+3. Configuración:
+   - **Title:** `Render Keep-Alive - PDF Service`
+   - **URL:** `https://cotiza-pdf-service.onrender.com/health`
+   - **Schedule:** Every 14 minutes
+   - **Request method:** GET
+   - **Timeout:** 30 segundos
+4. Click "Create cronjob"
+
+**Opción 2: UptimeRobot (Con cuenta)**
+
+1. Crea cuenta en https://uptimerobot.com
+2. Add New Monitor:
+   - **Monitor Type:** HTTP(s)
+   - **URL:** `https://cotiza-pdf-service.onrender.com/health`
+   - **Monitoring Interval:** 5 minutes
+
+### Verificar que Funciona
+
+- Ve a Render logs y verifica requests cada 14 minutos a `/health`
+- El servicio responderá instantáneamente (sin 50+ segundos de espera)
+
 ## Troubleshooting
+
+### Error: "Could not find Chrome"
+
+**Causa:** Puppeteer no descargó Chrome durante `npm install`.
+
+**Solución:**
+- Verifica que NO tengas `PUPPETEER_SKIP_DOWNLOAD=true` en variables de entorno
+- Asegúrate de que `PUPPETEER_CACHE_DIR=/opt/render/project/puppeteer` esté configurado
+- El script `postinstall` en package.json descarga Chrome automáticamente
 
 ### Error: "Timed Out" durante deploy
 
-**Causa:** Puppeteer está descargando Chrome por primera vez, lo cual puede tardar varios minutos.
+**Causa:** Puppeteer está descargando Chrome por primera vez (~150MB).
 
 **Solución:**
-- Asegúrate de que el Build Command incluya `npm run build`
-- Espera pacientemente el primer deploy (puede tardar 5-10 minutos)
+- Espera pacientemente 5-10 minutos
+- Verifica en logs que veas: `> pdf-service@1.0.0 postinstall`
 - Los deploys subsecuentes serán más rápidos gracias al cache
 
-### Error: "Logo not found"
+### Error: "Unauthorized"
 
-**Causa:** Falta la carpeta `public/` con el logo.
+**Causa:** El token no coincide entre Render y Vercel.
 
-**Solución:** La carpeta `public/logo.png` debe existir en el repo.
+**Solución:**
+- Verifica que `PDF_SERVICE_TOKEN` sea IGUAL en Render y Vercel
+- El header debe ser `X-PDF-SERVICE-TOKEN` (case-sensitive)
 
-### Servicio se duerme después de 15 minutos
+### Servicio se duerme / Error 504
 
-**Solución:** Configurar un keep-alive con cron-job.org haciendo ping a `/health` cada 14 minutos.
+**Causa:** Render hiberna servicios inactivos después de 15 minutos.
+
+**Solución:**
+- Configura keep-alive con cron-job.org (ver sección arriba)
+- Verifica que el cron job esté activo y funcionando
 
 ## Estructura de Archivos Necesaria
 

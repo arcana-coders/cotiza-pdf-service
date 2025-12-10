@@ -85,8 +85,15 @@ export async function generatePDFBuffer(input: CotizacionInput): Promise<Uint8Ar
     try {
         const page = await browser.newPage();
 
-        // Set content and wait for fonts to load
-        await page.setContent(html, { waitUntil: 'networkidle0' });
+        // Set content with more reliable wait condition
+        // 'load' waits for the page load event, which is enough for inline content
+        await page.setContent(html, {
+            waitUntil: 'load',
+            timeout: 60000 // 60 seconds timeout
+        });
+
+        // Small delay to ensure fonts are fully loaded
+        await page.evaluate(() => document.fonts.ready);
 
         const pdfBuffer = await page.pdf({
             format: 'letter',

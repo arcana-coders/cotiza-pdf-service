@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cotización</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 11px;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #003366;
+            padding: 15px 0.5in 15px 0.5in;
+        }
+
+        .company-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            max-width: 180px;
+            max-height: 80px;
+            margin-bottom: 5px;
+        }
+
+        .company-info p {
+            margin: 2px 0;
+            font-size: 10px;
+            color: #555;
+        }
+
+        .quote-details {
+            text-align: right;
+        }
+
+        .quote-details h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #003366;
+            text-transform: uppercase;
+        }
+
+        .quote-details p {
+            margin: 3px 0;
+            font-weight: 600;
+            font-size: 11px;
+            color: #444;
+        }
+
+        .client-info {
+            margin: 0 0.5in 15px 0.5in;
+            background-color: #f0f4f8;
+            padding: 12px;
+            border-left: 4px solid #003366;
+            border-radius: 3px;
+        }
+
+        .client-info h3 {
+            margin: 0 0 8px 0;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #003366;
+        }
+
+        .client-info p {
+            margin: 0;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        table {
+            width: calc(100% - 1in);
+            margin-left: 0.5in;
+            margin-right: 0.5in;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        th,
+        td {
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 10px;
+        }
+
+        th {
+            background-color: #003366;
+            color: #fff;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .section-row {
+            background-color: #e6eff6 !important;
+        }
+
+        .section-title-cell {
+            background-color: #e6eff6;
+            color: #003366;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 10px 15px;
+            font-size: 12px;
+            border-left: 5px solid #00509e;
+        }
+
+        .section-title {
+            background-color: #e6eff6;
+            color: #003366;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 10px 15px;
+            margin-top: 30px;
+            margin-bottom: 0;
+            font-size: 12px;
+            border-left: 5px solid #00509e;
+        }
+
+        .totals {
+            width: 50%;
+            margin-left: auto;
+            margin-right: 0.5in;
+            margin-top: 15px;
+            background-color: #f9f9f9;
+            padding: 12px;
+            border-radius: 4px;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .totals-row:last-child {
+            border-bottom: none;
+        }
+
+        .totals-row.final {
+            border-top: 2px solid #003366;
+            font-weight: 700;
+            font-size: 16px;
+            color: #003366;
+            margin-top: 10px;
+            padding-top: 10px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            margin-left: 0.5in;
+            margin-right: 0.5in;
+            font-size: 9px;
+            color: #777;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+
+        .bank-details {
+            margin-top: 15px;
+            margin-left: 0.5in;
+            margin-right: 0.5in;
+            font-size: 10px;
+            background: #fff;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .bank-details h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            color: #003366;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .notes-section {
+            margin-top: 15px;
+            margin-left: 0.5in;
+            margin-right: 0.5in;
+            background-color: #fff9c4;
+            /* Yellow background for notes */
+            padding: 12px;
+            border-left: 5px solid #fbc02d;
+            border-radius: 4px;
+        }
+
+        .notes-section h4 {
+            margin-top: 0;
+            color: #f57f17;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .notes-section ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="company-info">
+            {{#if logo}}
+            <img src="{{logo}}" alt="Logo" class="logo">
+            {{else}}
+            <h1>Ing. Arturo Carrillo</h1>
+            {{/if}}
+            <p><strong>Servicios:</strong> Reparación, mantenimiento y venta de Sopladores</p>
+            <p><strong>Email:</strong> ventas@sopladorescarrillo.com</p>
+        </div>
+        <div class="quote-details">
+            <h2>Cotización</h2>
+            <p>Folio: {{folio}}</p>
+            <p>Fecha: {{fecha}}</p>
+        </div>
+    </div>
+
+    <div class="client-info">
+        <h3>Información del Cliente</h3>
+        <p>{{cliente}}</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 15%;">CLAVE</th>
+                <th style="width: 45%;">DESCRIPCIÓN</th>
+                <th style="width: 10%;">CANT.</th>
+                <th style="width: 15%;">P. UNITARIO</th>
+                <th style="width: 15%;">IMPORTE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each secciones}}
+                {{#if titulo}}
+                <tr class="section-row">
+                    <td colspan="5" class="section-title-cell">{{titulo}}</td>
+                </tr>
+                {{/if}}
+                {{#each items}}
+                <tr>
+                    <td>{{clave}}</td>
+                    <td>{{descripcion}}</td>
+                    <td>{{cantidad}}</td>
+                    <td>{{precioUnitario}}</td>
+                    <td>{{importe}}</td>
+                </tr>
+                {{/each}}
+            {{/each}}
+        </tbody>
+    </table>
+
+    <div class="totals">
+        <div class="totals-row">
+            <span>Subtotal:</span>
+            <span>{{subtotal}}</span>
+        </div>
+        <div class="totals-row">
+            <span>IVA (16%):</span>
+            <span>{{iva}}</span>
+        </div>
+        <div class="totals-row final">
+            <span>Total:</span>
+            <span>{{total}}</span>
+        </div>
+    </div>
+
+    {{#if notas}}
+    <div class="notes-section">
+        <h4>Notas y Condiciones</h4>
+        <ul>
+            {{#each notas}}
+            <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    </div>
+    {{/if}}
+
+    <div class="bank-details">
+        <h4>Datos Bancarios</h4>
+        <p><strong>Banco:</strong> BBVA Bancomer</p>
+        <p><strong>Beneficiario:</strong> Arturo Carrillo</p>
+        <p><strong>Cuenta:</strong> 0123456789</p>
+        <p><strong>CLABE:</strong> 012345678901234567</p>
+    </div>
+
+    <div class="footer">
+        <p>Gracias por su preferencia. Precios sujetos a cambio sin previo aviso.</p>
+    </div>
+    <script id="cotizacion-data" type="application/json">
+        {{{json rawData}}}
+    </script>
+</body>
+
+</html>

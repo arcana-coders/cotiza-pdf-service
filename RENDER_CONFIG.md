@@ -20,7 +20,8 @@ Agrega estas variables en Render Dashboard → Environment:
 
 - `NODE_ENV` = `production`
 - `PDF_SERVICE_TOKEN` = `de288940-1f5d-431f-8213-62148d98acf4` (o tu token personalizado)
-- `PUPPETEER_SKIP_DOWNLOAD` = `false` (para asegurar que descargue Chrome)
+
+**IMPORTANTE:** Si tienes una variable `PUPPETEER_SKIP_DOWNLOAD`, elimínala o configúrala como `false`.
 
 ### Health Check
 

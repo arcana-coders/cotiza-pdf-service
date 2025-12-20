@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const ItemSchema = z.object({
-    clave: z.string(),
+    clave: z.string().optional().default(''), // Make optional to prevent validation errors
     descripcion: z.string(),
     cantidad: z.number().positive(),
     precioUnitario: z.number().nonnegative(),
